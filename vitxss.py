@@ -1,8 +1,8 @@
 import requests
 import subprocess
-import argparse
-import re
 import json
+import re
+import argparse
 from urllib.parse import urlparse
 from colorama import Fore, init
 
