@@ -4,7 +4,7 @@ import json
 import re
 import argparse
 from urllib.parse import urlparse
-from colorama import Fore, init
+from colorama import Fore, Style, init
 
 init()
 
@@ -16,7 +16,7 @@ class Scanner:
     
     @staticmethod
     def read(filename):
-        print(f'{Fore.WHITE}READING URLS')
+        print(f'{Style.BRIGHT}{Fore.WHITE}READING URLS')
 
         with open(filename, 'r') as urls_file:
             urls = urls_file.read().splitlines()
@@ -114,7 +114,7 @@ class Scanner:
         payload_list = []
         size = int(len(arr) / 2)
 
-        print(f'{Fore.WHITE}[+] LOADING PAYLOAD FILE payloads.json')
+        print(f'{Style.BRIGHT}{Fore.WHITE}[+] LOADING PAYLOAD FILE payloads.json')
 
         with open('payloads.json') as payloads_file:
             payloads = json.load(payloads_file)
@@ -155,7 +155,7 @@ class Scanner:
                 response = requests.get(new_url, params=final_parameters).text
 
                 if data + 'randomstring' in response:
-                    print(f'{Fore.GREEN}[+] {data} is reflecting in the response')
+                    print(f'{Style.BRIGHT}{Fore.GREEN}[+] {data} is reflecting in the response')
 
                     params[param].append(data)
         except Exception as e:
@@ -176,10 +176,10 @@ class Scanner:
 
         parameters = self.parameters(url)
 
-        print(f'[+] {len(parameters)} parameters identified')
+        print(f'{Style.BRIGHT}[+] {len(parameters)} parameters identified')
 
         for parameter in parameters:
-            print(f'[+] Testing parameter name: {parameter}')
+            print(f'{Style.BRIGHT}[+] Testing parameter name: {parameter}')
 
             out = self.validator(dangerous_characters, parameter, url)
 
@@ -204,13 +204,13 @@ class Scanner:
                     response = requests.get(new_url, params=data).text
 
                     if payload in response:
-                        print(f'{Fore.RED}[+] VULNERABLE: {url}\nPARAMETER: {key}\nPAYLAOD USED: {payload}')
+                        print(f'{Style.BRIGHT}{Fore.RED}[+] VULNERABLE: {url}\nPARAMETER: {key}\nPAYLAOD USED: {payload}')
 
                         return self.replace(url, key, payload)
                 except Exception as e:
                     print(e)
 
-        print(f'{Fore.LIGHTWHITE_EX}[+] TARGET SEEMS TO BE NOT VULNERABLE')
+        print(f'{Style.BRIGHT}{Fore.LIGHTWHITE_EX}[+] TARGET SEEMS TO BE NOT VULNERABLE')
 
         return
 
@@ -225,13 +225,13 @@ try:
     urls = scanner.read(args.filename)
 
     for url in urls:
-        print(f'{Fore.WHITE}[+] TESTING {url}')
+        print(f'{Style.BRIGHT}{Fore.WHITE}[+] TESTING {url}')
 
         vuln = scanner.scanner(url)
 
         if vuln:
             scanner.write(output, vuln)
 
-    print(f'{Fore.WHITE}[+] COMPLETED')
+    print(f'{Style.BRIGHT}{Fore.WHITE}[+] COMPLETED')
 except KeyboardInterrupt:
     pass
